@@ -15,7 +15,7 @@ class UserRepository {
         url_avatar as "urlAvatar",
         username 
         FROM users us
-        WHERE us.deleted_at is NULL  and (us.username = $1 or us.email = $1 or us.id = $1)`, [user])
+        WHERE us.deleted_at is NULL  and (us.username = $1 or us.email = $1)`, [user])
       return respDb.rows.length === 0 ? null : respDb.rows[0];
     } catch (error) {
       throw error
