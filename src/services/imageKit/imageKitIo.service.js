@@ -10,7 +10,6 @@ const createUrl = (fileName, folder) => {
 
 const uploadFile = async (files, path, tags = []) => {
   try {
-    console.log('obtenidos');
     const promises = [];
     for (let i = 0; i < files.length; i++) {
       promises.push(imagekit.upload({

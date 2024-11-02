@@ -60,16 +60,16 @@ class PostRepository {
       let i = 1
       for (const pair of criteria) {
         if (pair[0] === 'cursor') {
-          params.push(`(upload_at < $${i})`)
+          params.push(`(p.created_at < $${i})`)
           values.push(new Date(Number(pair[1])))
         } else if (pair[0] === 'query') {
-          params.push(`(description = $${i} or t.name ilike $${i} or us.username ilike $${i})`)
+          params.push(`(p.description = $${i} or t.name ilike $${i} or us.username ilike $${i})`)
           values.push(`%${pair[1]}%`)
         } else if (pair[0] === 'tag') {
           params.push(`(t.name = $${i})`)
           values.push(pair[1])
         } else if (pair[0] === 'user') {
-          params.push(`(us.username = $${i} or us.user_id = $${i})`)
+          params.push(`(us.username = $${i})`)
           values.push(pair[1])
         } else {
           continue
@@ -78,29 +78,29 @@ class PostRepository {
       }
       const query = `
           SELECT 
-          p.post_id as id,
+          p.id as id,
           p.description,
-          p.upload_at as "uploadAt",
+          p.created_at as "uploadAt",
           p.likes,
           p.downloads,
           p.views,
-          json_build_object('id', us.user_id, 'username', us.username, 'urlAvatar', us.url_avatar) as author,
-          img.url as image,
+          json_build_object('id', us.id, 'username', us.username, 'urlAvatar', us.url_avatar) as author,
           json_agg(t.name) as tags,
+          p.url_image as "urlImage",
           (lk.user_id is not NUll) as liked
           FROM posts p 
-          JOIN users us on p.user_id = us.user_id
-          JOIN images img on img.post_id = p.post_id
-          LEFT join post_tags pt on pt.post_id = p.post_id
-          LEFT join tags t on pt.tag_id = t.tag_id
-          LEFT join likes lk on lk.post_id = p.post_id and lk.user_id = '${externalId}' and lk.deleted = FALSE
-          WHERE p.visible = TRUE and us.state = TRUE  and us.deleted = FALSE ${params.length > 0 ? ` and (${params.join(' and ')}) ` : ''}
-          GROUP by p.post_id, us.user_id, us.username, us.url_avatar, img.url, img.format, lk.user_id
-          ORDER by p.upload_at DESC 
+          JOIN users us on p.user_id = us.id
+          LEFT join posts_tags pt on pt.post_id = p.id
+          LEFT join tags t on pt.tag_id = t.id
+          LEFT join users_likes lk on lk.post_id = p.id ${externalId ? `and lk.user_id = '${externalId}'` : ''} and lk.state = TRUE
+          WHERE p.visible = TRUE and us.state = TRUE  and us.deleted_at IS NULL ${params.length > 0 ? ` and (${params.join(' and ')}) ` : ''}
+          GROUP by p.id, us.id, us.username, us.url_avatar, lk.user_id
+          ORDER by p.created_at DESC 
           LIMIT 20`
       const respDb = await client.query(query, values)
       return respDb.rows;
     } catch (error) {
+      console.log(error);
       throw error
     } finally {
       client.release()
@@ -135,7 +135,7 @@ class PostRepository {
     }
   };
 
-  async create(userId, urlImages, tags = [], uploadFilePromise) {
+  async create(userId, photos, tags = [], uploadFilePromise) {
     const client = await this.pool.connect();
     try {
       const currentDate = new Date().toISOString()
@@ -148,12 +148,12 @@ class PostRepository {
         const placeholder = new Array(tagsFlat.length).fill('$').map((e, i) => `${e}${i + 1} `)
         allTagsFound = (await client.query(`SELECT id, name FROM tags WHERE name in (${placeholder.join(',')})`, tagsFlat)).rows
       }
-      for (let i = 0; i < urlImages.length; i++) {
-        const urlImage = urlImages[i]
+      for (let i = 0; i < photos.length; i++) {
+        const urlImage = photos[i].url
+        const originalName = photos[i].originalname
         const postId = uuid()
-        postToInserted.push(`('${postId}', '${userId}', '','${urlImage}', '${currentDate}','${currentDate}')`)
+        postToInserted.push(`('${postId}', '${userId}', '','${urlImage}','${originalName}' ,'${currentDate}','${currentDate}')`)
         const size = tags[i] ? tags[i].length : 0
-
         for (let j = 0; j < size; j++) {
           const tag = tags[i][j].toLowerCase()
           const tagFound = allTagsFound.find(t => t.name === tag)
@@ -175,7 +175,7 @@ class PostRepository {
       await Promise.all([
         uploadFilePromise,
         client.query(`INSERT INTO posts
-      (id, user_id, description, url_image, created_at, updated_at) 
+      (id, user_id, description, url_image, original_file_name, created_at, updated_at) 
             VALUES ${postToInserted.join(',')} `),
 
         relationTagInserted.length > 0 ? client.query(`INSERT INTO posts_tags
