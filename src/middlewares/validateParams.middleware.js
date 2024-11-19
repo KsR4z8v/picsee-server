@@ -77,9 +77,9 @@ const validateUploadPost = async (req, res, next) => {
       }
       const { width, height } = await sharp(f.buffer).metadata()
 
-      if ((width * height) < 1000000) {
-        throw new InvalidBody('Error: La imagen debe tener un tamaño mínimo de 1 MP.')
-      }
+      // if ((width * height) < 100000) {
+      //   throw new InvalidBody('Error: La imagen debe tener un tamaño mínimo de 1 MP.')
+      // }
     }
     const { tags } = req.body
     if (tags) {

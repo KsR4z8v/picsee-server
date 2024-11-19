@@ -76,6 +76,7 @@ class PostRepository {
         }
         i += 1
       }
+      console.log(externalId);
       const query = `
           SELECT 
           p.id as id,
@@ -92,7 +93,7 @@ class PostRepository {
           JOIN users us on p.user_id = us.id
           LEFT join posts_tags pt on pt.post_id = p.id
           LEFT join tags t on pt.tag_id = t.id
-          LEFT join users_likes lk on lk.post_id = p.id ${externalId ? `and lk.user_id = '${externalId}'` : ''} and lk.state = TRUE
+          LEFT join users_likes lk on lk.post_id = p.id ${externalId ? `and lk.user_id = '${externalId}'` : 'and FALSE'} and lk.state = TRUE
           WHERE p.visible = TRUE and us.state = TRUE  and us.deleted_at IS NULL ${params.length > 0 ? ` and (${params.join(' and ')}) ` : ''}
           GROUP by p.id, us.id, us.username, us.url_avatar, lk.user_id
           ORDER by p.created_at DESC 
@@ -100,12 +101,51 @@ class PostRepository {
       const respDb = await client.query(query, values)
       return respDb.rows;
     } catch (error) {
-      console.log(error);
       throw error
     } finally {
       client.release()
     }
   };
+
+
+  async getPostsLiked(user) {
+    const client = await this.pool.connect();
+    try {
+      const userFound = await client.query('SELECT id from users WHERE username=$1 and deleted_at is NULL and state = TRUE', [user])
+      if (userFound.rows.length === 0) {
+        throw new UserNotFound(user)
+      }
+      const userId = userFound.rows[0].id
+      const query = `
+          SELECT 
+          p.id as id,
+          p.description,
+          p.created_at as "uploadAt",
+          p.likes,
+          p.downloads,
+          p.views,
+          json_build_object('id', us.id, 'username', us.username, 'urlAvatar', us.url_avatar) as author,
+          json_agg(t.name) as tags,
+          p.url_image as "urlImage",
+          (lk.user_id is not NUll) as liked
+          FROM posts p 
+          JOIN users us on p.user_id = us.id
+          LEFT JOIN posts_tags pt on pt.post_id = p.id
+          LEFT JOIN tags t on pt.tag_id = t.id
+          JOIN users_likes lk on lk.post_id = p.id and lk.user_id = $1 and lk.state = TRUE
+          WHERE p.visible = TRUE and us.state = TRUE  and us.deleted_at IS NULL
+          GROUP by p.id, us.id, us.username, us.url_avatar, lk.user_id
+          ORDER by p.created_at DESC 
+          LIMIT 20`
+      const respDb = await client.query(query, [userId])
+      return respDb.rows;
+    } catch (error) {
+      throw error
+    } finally {
+      client.release()
+    }
+  };
+
 
   async like(postId, userId) {
     const client = await this.pool.connect();

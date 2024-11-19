@@ -5,15 +5,15 @@ const TokenGoogleInvalid = require("../../exceptions/TokenGoogleInvalid")
 
 const validateCredentialsGoogle = async (token) => {
     try {
-        const client = new OAuth2Client(process.env.ID_CLIENT_GOOGLE)
+        const clientId = process.env.ID_CLIENT_GOOGLE
+        const client = new OAuth2Client({ clientId })
         const ticket = await client.verifyIdToken({
             idToken: token,
-            audience: process.env.ID_CLIENT
+            audience: clientId
         })
         const data = ticket.getPayload()
         return data
     } catch (err) {
-        console.log(err);
         throw new TokenGoogleInvalid
     }
 }

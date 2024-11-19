@@ -5,6 +5,7 @@ const controllers = require('../../controllers/v1/')
 const router = Router()
 
 
+router.get('/:user', validateToken, controllers.getUserInfoController)
 router.delete('/', validateToken, controllers.deleteUserController)
 router.post('/', validateCreateUser, controllers.createUserController)
 router.patch('/', validateToken, validateUpdateUser, controllers.updateUserController)

@@ -16,7 +16,11 @@ const getPostsController = async (req, res) => {
     let cursor
     if (criteria.has('query') && criteria.get('query') === 'relevant') {
       posts = await postRepository.getRelevant()
-    } else {
+    }
+    else if (criteria.has('liked') && criteria.get('liked') === 'true' && criteria.has('user')) {
+      posts = await postRepository.getPostsLiked(criteria.get('user'));
+    }
+    else {
       posts = await postRepository.get(criteria, userId);
       const lastPost = posts[posts.length - 1]
       cursor = lastPost ? lastPost.uploadAt.getTime() : new Date().getTime()

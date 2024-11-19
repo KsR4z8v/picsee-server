@@ -7,7 +7,8 @@ const connectionString = process.env.URL_DB_POSTGRES;
 const pool = new Pool({
   connectionString, ssl: true,
   max: 90,
-  allowExitOnIdle: true
+  allowExitOnIdle: true,
+  ssl: false
 }); // creo pool de conexiones
 
 // EVENTOS DEL POOL

@@ -19,12 +19,13 @@ class NodeEmailService {
         const transporter = createTransport(this.CONFIGS);
         try {
             const response = await transporter.sendMail({
-                from: "snapwireinfo@gmail.com",
+
+                from: "noreply-security@picsee.com",
                 to: email,
                 subject,
                 html: bodyHtml,
             });
-            console.log("Envia correo a", email);
+            //console.log("Envia correo a", email);
         } catch (error) {
             console.log(error);
         }

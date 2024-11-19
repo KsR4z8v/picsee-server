@@ -13,7 +13,7 @@ const sendRecoverPassLink = async (req, res) => {
             const token = sign({ userId: userFound.userId, email }, process.env.JWT_SECRET_RECOVER_PASS, { expiresIn: '5m' })
             const tokenEncrypt = AES.encrypt(token, process.env.SECRET_ENCRYPT).toString()
             const tokenUrl = encodeURIComponent(tokenEncrypt)
-            void NodeEmailService.sendEmail(email, 'Recuperar', resetPassword(userFound.username, tokenUrl, process.env.URL_REDIRECT_RECOVER_PASS))
+            void NodeEmailService.sendEmail(email, 'Recuperar contraseña', resetPassword(userFound.username, tokenUrl, process.env.URL_REDIRECT_RECOVER_PASS))
         }
         return res.sendStatus(204)
     }

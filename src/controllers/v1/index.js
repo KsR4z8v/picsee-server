@@ -16,6 +16,7 @@ const updateUserController = require("./users/updateUser.controller");// TODO
 const updateAvatarController = require("./users/updateAvatar.controller");
 const sendRecoverPassLink = require('./auth/sendRecoverPassLink.controller')
 const resetPasswordController = require('./auth/resetPass.controller')
+const getUserInfoController = require('./users/getUser.controller')
 
 module.exports = {
   signController,
@@ -30,5 +31,6 @@ module.exports = {
   downloadPostController,
   likeController,
   sendRecoverPassLink,
-  resetPasswordController
+  resetPasswordController,
+  getUserInfoController
 };

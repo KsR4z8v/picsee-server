@@ -13,8 +13,8 @@ const createUserController = async (req, res) => {
     await userRepository.create({ userId, username, password: passwordHash, email, firstNames, lastNames, urlAvatar: process.env.DEFAULT_AVATAR_URL });
 
     const accessToken = sign({
-      userId: userFound.userId,
-      username: userFound.username,
+      userId,
+      username,
     }, process.env.JWT_KEY_SECRET, { expiresIn: '2h' });
 
     return res.status(200).json({
@@ -27,7 +27,6 @@ const createUserController = async (req, res) => {
         token: accessToken,
       }
     });
-
   } catch (e) {
     errorHandler(e, req, res)
   }

@@ -11,39 +11,49 @@ const authPlatformGoogleController = async (req, res) => {
 
   try {
 
-    const { credential } = req.body;
+    const { credential, clientId } = req.body;
 
     if (!credential) {
       throw new InvalidBody('missing -> credentials')
     }
-
+    const localClientId = process.env.ID_CLIENT_GOOGLE
+    if (clientId !== localClientId) {
+      throw new InvalidBody('ClientId is invalid.')
+    }
     const { picture, name, given_name, email } = await validateCredentialsGoogle(credential)
-
-    const user = {
-      userId: uuid(),
-      username: name,
-      email,
-      firstNames: given_name,
-      lastNames: " ",
-      password: '',
-      urlAvatar: picture
-    };
-
     let userFound = await userRepository.find(email);
 
+    let username
+    let urlAvatar
+    let userId
     if (!userFound) {
-      user.password = await hashData(generatePassword(30))
-      await userRepository.create(user);
+      username = `${email.split('@')[0]}-${Math.round(Math.random() * 1e10)}`
+      userId = uuid()
+      urlAvatar = picture
+      const password = await hashData(generatePassword(30))
+      await userRepository.create({
+        userId,
+        username,
+        email,
+        firstNames: given_name,
+        lastNames: " ",
+        password,
+        urlAvatar
+      });
+    } else {
+      username = userFound.username
+      urlAvatar = userFound.urlAvatar
+      userId = userFound.userId
     }
 
-    const accessToken = sign(user, process.env.JWT_KEY_SECRET, { expiresIn: '2h' });
+    const accessToken = sign({ userId }, process.env.JWT_KEY_SECRET, { expiresIn: '2h' });
 
     res.status(200).json({
       state: 'ok',
       data: {
-        userId: user.userId,
-        urlAvatar: user.urlAvatar,
-        username: user.username,
+        userId,
+        urlAvatar,
+        username,
         token: accessToken
       }
     });

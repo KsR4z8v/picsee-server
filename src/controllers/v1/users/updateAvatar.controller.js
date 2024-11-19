@@ -9,25 +9,6 @@ const updateAvatarController = async (req, res) => {
 
   const { avatar } = req.files;
   try {
-    const userId = req.userId;
-    const avatarFound = await userRepository.getAvatar(userId);
-
-    if (avatarFound.id_kitio !== null) {
-      await imageKitIio._delete([{ id_cdn: avatarFound.id_kitio }]);
-    }
-
-    //? upload the new avatar
-    const data_res = await imageKitIio._upload(
-      [avatar],
-      IMAGE_KIT_CONFIG.avatars_folder_dest
-    );
-
-    await userRepository.updateAvatar(userId, {
-      url: data_res[0].url,
-      id_kitio: data_res[0].id_kitio,
-    });
-
-    return res.status(200).json({ url: data_res[0].url });
 
   } catch (e) {
     errorHandler(e, req, res)

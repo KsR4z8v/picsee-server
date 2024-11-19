@@ -15,7 +15,7 @@ class UserRepository {
         url_avatar as "urlAvatar",
         username 
         FROM users us
-        WHERE us.deleted_at is NULL  and (us.username = $1 or us.email = $1)`, [user])
+        WHERE us.deleted_at is NULL and (us.username = $1 or us.email = $1)`, [user])
       return respDb.rows.length === 0 ? null : respDb.rows[0];
     } catch (error) {
       throw error
@@ -23,6 +23,26 @@ class UserRepository {
       client.release();
     }
   };
+
+  async getProfile(user) {
+    const client = await this.pool.connect();
+    try {
+      const respDb = await client.query(`SELECT 
+        id as "userId",
+        url_avatar as "urlAvatar",
+        bio,
+        ARRAY[url_social_1,url_social_2,url_social_3,url_social_4] as "socialLinks",
+        username
+        FROM users us
+        WHERE us.deleted_at is NULL and us.username = $1`, [user])
+      return respDb.rows.length === 0 ? null : respDb.rows[0];
+    } catch (error) {
+      throw error
+    } finally {
+      client.release();
+    }
+  };
+
 
   async create(user) {
     const client = await this.pool.connect();
