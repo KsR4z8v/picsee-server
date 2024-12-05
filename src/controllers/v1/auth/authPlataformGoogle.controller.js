@@ -46,7 +46,7 @@ const authPlatformGoogleController = async (req, res) => {
       userId = userFound.userId
     }
 
-    const accessToken = sign({ userId }, process.env.JWT_KEY_SECRET, { expiresIn: '2h' });
+    const accessToken = sign({ userId, username }, process.env.JWT_KEY_SECRET, { expiresIn: '2h' });
 
     res.status(200).json({
       state: 'ok',

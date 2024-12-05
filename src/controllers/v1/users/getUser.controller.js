@@ -6,7 +6,12 @@ const getUserController = async (req, res) => {
     //* controller for get user info
     try {
         const { user } = req.params
-        const userFound = await userRepository.getProfile(user)
+        let userFound
+        if (user === req.username) {
+            userFound = await userRepository.getInfo(user)
+        } else {
+            userFound = await userRepository.getProfile(user)
+        }
         if (!userFound) {
             throw new UserNotFound(user)
         }

@@ -8,7 +8,7 @@ const createPublicUrl = (folder, fileName) => {
 
 const uploadFile = async (folder, files) => {
   // Check if the folder exists, if not create it
-  const storage = new Storage({ projectId: 'third-fire-440814-p1', credentials: require('../../third-fire-440814-p1-80e723bd35ae.json') })
+  const storage = new Storage({ projectId: 'third-fire-440814-p1', credentials: require('../../google-auth.json') })
   const folderPath = `${folder}/`;
   const bucket = storage.bucket(process.env.BUCKET_NAME);
   const folderFile = bucket.file(folderPath);

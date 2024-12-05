@@ -76,7 +76,6 @@ class PostRepository {
         }
         i += 1
       }
-      console.log(externalId);
       const query = `
           SELECT 
           p.id as id,

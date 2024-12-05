@@ -31,7 +31,7 @@ class UserRepository {
         id as "userId",
         url_avatar as "urlAvatar",
         bio,
-        ARRAY[url_social_1,url_social_2,url_social_3,url_social_4] as "socialLinks",
+        social_links as "socialLinks",
         username
         FROM users us
         WHERE us.deleted_at is NULL and us.username = $1`, [user])
@@ -42,6 +42,29 @@ class UserRepository {
       client.release();
     }
   };
+
+  async getInfo(user) {
+    const client = await this.pool.connect();
+    try {
+      const respDb = await client.query(`SELECT 
+        id as "userId",
+        url_avatar as "urlAvatar",
+        bio,
+        social_links as "socialLinks",
+        username,
+        first_name as "firstName",
+        last_name as "lastName",
+        date_born as "dateBorn",
+        email
+        FROM users us
+        WHERE us.deleted_at is NULL and us.username = $1`, [user])
+      return respDb.rows.length === 0 ? null : respDb.rows[0];
+    } catch (error) {
+      throw error
+    } finally {
+      client.release();
+    }
+  }
 
 
   async create(user) {
@@ -57,9 +80,10 @@ class UserRepository {
         email,
         password,
         url_avatar,
+        date_born,
         created_at,
         updated_at) 
-        VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9) RETURNING id`,
+        VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10) RETURNING id`,
         [
           user.userId,
           user.username,
@@ -68,6 +92,7 @@ class UserRepository {
           user.email,
           user.password,
           user.urlAvatar,
+          new Date(Date.now() - 599594400000),
           currentDate,
           currentDate
         ]
@@ -105,10 +130,12 @@ class UserRepository {
         params.push(`${keys[i]} = $${values.length + 1}`)
         values.push(data[keys[i]])
       }
+
       const respDb = await client.query(`UPDATE users SET ${params.join(',')} WHERE id = $1 and deleted_at IS NULL`, values)
       if (respDb.rowCount <= 0) {
         throw new UserNotFound(userId)
       }
+
     } catch (error) {
       throw error
     } finally {

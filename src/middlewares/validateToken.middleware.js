@@ -12,6 +12,7 @@ const validateToken = async (req, res, next) => {
     }
     const data = verify(String(token), process.env.JWT_KEY_SECRET);
     req.userId = data.userId
+    req.username = data.username
     next();
   } catch (e) {
     errorHandler(e, req, res)

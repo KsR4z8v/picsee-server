@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "third-fire-440814-p1",
+  "private_key_id": "80e723bd35ae965f0eae713b56baf603a1fdefa3",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQC3lRUPP78kRN2a\n/7b8LOmHPhwhIEv/Zkf/UamMWssDy4NKV9ZUbC4IsFHBP/RtLwnAwhk+0R7pbxk6\nxPzn0Qh992R7zXQVJJrM47cqSONF8+0h81Kczgo8EtC5YQHOocfA0vHBBqMX9tvA\ngchxUFowlWKbbvAdY7SiKZvWqCf9yhsC3rvRH+zWqL+BcsClc5/GIaTHixIfaG6D\nlO09EPv9pyFxDWh0l4E20DeMd8b9EC+vleDoQKw5r3cft0hXMX9jylvHQZsnK4HZ\n7HmnGDG2QyixiyEViPzvaON4Gpou4d4qNCcRfM2iDjvi5JhBYtpdmxX3cAURfSrd\nb2wzwTUDAgMBAAECggEAESoTs37K0MnNjHHvOmm6leYFPEWoRWNbRPBuMUzF4X90\nMY2/4NnSfgZ6Rl7D7DdzKn4bXSexQ7MbAUcsvEHrkNeCIh8mBNoMzS5XUFFLSp2R\nZNS6uyV6iH5b3JFI2Xh/1DQE3X7Q3es7Rab8xjd0j0lQVGcNdTn+yBCq3OmQ/6Xu\nSlqLmkN6yzbFvKc2y/Y50vs8fRLcxUX5fEvjMupbIIFp4t9Y6edZX52IH07rwlMJ\nP5RaCsK2l9T9mIhW/I8B0F94RHNadpDFb48VHL3tBeOTnANH2ea0IXzxylqUfTEd\nz/Y60TpeLg1OHMeDDZN1LNe5KKpuSxwJRujiYrU/TQKBgQD+vl6xva/cmM8LRUOZ\n++1GojwohUQhdHrlYUiyZnU5UjgdRPVUHNjzPCMTphwTWH4QK+2JQ4EdUIcJSIrR\nLXwyWsIAL+B3KlXIX0380Mi1RdViagK6EHN2oLM6eo9uSVFZzEFr6P7e5FMtq09C\nyZ4Ey/mjjGucDewQ+OCGNvPg7QKBgQC4fN3gY3uM3CB6wB+3QGMokEoHCQvZtFwS\nXcEglqnhQfC5Ks9fTe+syuf50Hba7PYTdM0Pl1j0mUCZ5TbOETSF3Au8asveSHHf\ne+SAerAWscmldVkSmRq0MYt5BAuwmI/JJxHi7vRmgOwTf6WNEmRbOlErNemcW8Tk\nCsd0YwzfrwKBgQDuRzkh/jDiIZkAjNA311rRB+1HZagdtutBZWbvYEDj1hEg56Cm\nBbm0gpq4xVZbjhmUnNI544eA2RMGTvFxyZ7zJstyC1ZlgJburp6vDMfAL0ryHADi\n84JdAuHCoGNLII9UdGb5Pd4wtNdMz4F7EkWZbQXbwfvh42/dTD4PrJUf3QKBgHKn\n19UOvshKPj1Ljep7r6SUGA3LR3wjpV0cu1wfhrCiJJNP0dVvQFdpO0Z8koF4524s\nFw1riDNr00RRuf/TnYrbuMd+r/kTmQHFo7tdhHZ2Q9X62kK+uGPorr+lDgbQqfvf\ntjQNQgM6eH2dxSuplIlF8xAhz3AHcJQxRshEjsmtAoGBAOJMT8JI7dobK8LAwX9g\naMWwgMJCxG72OxTpWpUwRyO7eMYxI36vsRnPM++nX2HUFusRL3EIQ/uqp77wa/Nq\njX/Z85x1ZlvYYJATtnb3zG88MPjl6MAAezGf9bdh2LqoJdNFeYPpdMNCqRGY+Y7S\nKoKgdQ+LCSgPJpYRU1li78SP\n-----END PRIVATE KEY-----\n",
+  "client_email": "picsee-cloud@third-fire-440814-p1.iam.gserviceaccount.com",
+  "client_id": "117227638629431890275",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/picsee-cloud%40third-fire-440814-p1.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}

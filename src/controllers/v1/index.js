@@ -13,10 +13,10 @@ const downloadPostController = require('./post/downloadPost.controller')
 const createUserController = require("./users/createUser.controller");
 const deleteUserController = require("./users/deleteUser.controller");
 const updateUserController = require("./users/updateUser.controller");// TODO
-const updateAvatarController = require("./users/updateAvatar.controller");
 const sendRecoverPassLink = require('./auth/sendRecoverPassLink.controller')
 const resetPasswordController = require('./auth/resetPass.controller')
 const getUserInfoController = require('./users/getUser.controller')
+const updatedPasswordController = require('./users/updatePassword.controller')
 
 module.exports = {
   signController,
@@ -24,7 +24,7 @@ module.exports = {
   createUserController,
   deleteUserController,
   updateUserController,
-  updateAvatarController,
+  updatedPasswordController,
   uploadPostController,
   getTagsController,
   getPostsController,

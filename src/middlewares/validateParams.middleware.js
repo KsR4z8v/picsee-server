@@ -100,13 +100,16 @@ const validateUploadPost = async (req, res, next) => {
 
 const validateUpdateUser = (req, res, next) => {
   try {
-    const keysValids = ['city', 'country', 'firstName', 'lastName']
+    const keysValids = ['firstName', 'lastName', 'dateBorn', 'bio', 'socialLinks', 'avatar']
     const keys = Object.keys(req.body)
     for (let i = 0; i < keys.length; i++) {
       if (!keysValids.includes(keys[i])) {
         throw new InvalidBody('propiedades incorrectas por favor suministre las propiedades correctas')
       }
-      if (req.body[keys[i]].trim() === '') {
+      if (String(keys[i]).trim() === '') {
+        throw new InvalidBody('No deben de haber propiedades vacias')
+      }
+      if (Array.isArray(keys[i]) && keys[i].length === 0) {
         throw new InvalidBody('No deben de haber propiedades vacias')
       }
     }

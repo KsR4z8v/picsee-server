@@ -21,9 +21,7 @@ const uploadPostController = async (req, res) => {
       const prefix = Math.round(Math.random() * 1e4)
       const ext = extname(originalname)
       const fileName = `${prefix}-${uuid()}${ext}`
-      console.log(fileName);
       imagesToDb.push({ url: createPublicUrl(folderPath, fileName), originalname })
-      console.log(imagesToDb);
       filesToCloud.push((async () => {
         const fileReduced = await sharp(buffer).jpeg({ quality }).toBuffer()// bajo la calidad a un 80%
         return { buffer: fileReduced, fileName }
